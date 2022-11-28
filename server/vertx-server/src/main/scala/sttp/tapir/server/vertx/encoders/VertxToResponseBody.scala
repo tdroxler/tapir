@@ -44,8 +44,24 @@ class VertxToResponseBody[F[_], S <: Streams[S]](serverOptions: VertxServerOptio
       format: CodecFormat,
       charset: Option[Charset]
   ): RoutingContext => Future[Void] = { rc =>
+      // val pub = readStreamCompatible.asReadStream(v.asInstanceOf[readStreamCompatible.streams.BinaryStream])
+      // println(s"${Console.RED}${Console.BOLD}*** pub ***\n\t${Console.RESET}${pub}")
+      // val pipe = pub.pipe
+      // println(s"${Console.RED}${Console.BOLD}*** pipe ***\n\t${Console.RESET}${pipe}")
+
+      // val p = pipe.to(rc.response)
+      // rc.response.exceptionHandler{ e =>
+      // println(s"${Console.RED}${Console.BOLD}*** rcResponse excetion handler e ***\n\t${Console.RESET}${e}")
+    // }
+      // rc.response.endHandler{ e =>
+      // println(s"${Console.RED}${Console.BOLD}*** CLOSING PIPE ***\n\t${Console.RESET}${e}")
+      // println(s"${Console.RED}${Console.BOLD}*** pipe ***\n\t${Console.RESET}${pipe}")
+      // pipe.close()
+      // println(s"${Console.RED}${Console.BOLD}*** CLOSING PIPE ***\n\t${Console.RESET}${e}")
+    // }
+      // println(s"${Console.RED}${Console.BOLD}*** p ***\n\t${Console.RESET}${p}")
     Future
-      .succeededFuture(Pipe(readStreamCompatible.asReadStream(v.asInstanceOf[readStreamCompatible.streams.BinaryStream]), rc.response))
+      .succeededFuture(Pipe(readStreamCompatible.asReadStream(v.asInstanceOf[readStreamCompatible.streams.BinaryStream]),rc.response))
       .mapEmpty()
   }
 

@@ -105,16 +105,27 @@ object Pipe {
       }
       ()
     })
-    request.endHandler { _ =>
+    request.endHandler { e =>
+      println(s"${Console.RED}${Console.BOLD}*** TAPIR request end e ***\n\t${Console.RESET}${e}")
       val state = progress.updateAndGet(_.copy(completed = true))
       if (state.inProgress == 0) writeStream.end()
       ()
     }
-    request.exceptionHandler { _ =>
+    request.exceptionHandler { e =>
+      println(s"${Console.RED}${Console.BOLD}*** TAPIR request excepteion e ***\n\t${Console.RESET}${e}")
       writeStream.end()
       ()
     }
 
+    writeStream.exceptionHandler { e =>
+      println(s"${Console.RED}${Console.BOLD}*** TAPIR write stream exception e ***\n\t${Console.RESET}${e}")
+      //writeStream.end()
+      //request.pause()
+      // request.exceptionHandler(null);
+      // request.handler(null);
+      // request.resume();
+      // ()
+    }
     request.resume()
     ()
   }
