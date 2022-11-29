@@ -119,6 +119,7 @@ object Pipe {
 
     writeStream.exceptionHandler { e =>
       println(s"${Console.RED}${Console.BOLD}*** TAPIR write stream exception e ***\n\t${Console.RESET}${e}")
+      request.handle(new Throwable("arst"))
       //writeStream.end()
       //request.pause()
       // request.exceptionHandler(null);
