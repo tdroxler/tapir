@@ -61,7 +61,7 @@ class VertxToResponseBody[F[_], S <: Streams[S]](serverOptions: VertxServerOptio
     // }
       // println(s"${Console.RED}${Console.BOLD}*** p ***\n\t${Console.RESET}${p}")
     Future
-      .succeededFuture(Pipe(readStreamCompatible.asReadStream(v.asInstanceOf[readStreamCompatible.streams.BinaryStream]),rc.response))
+      .succeededFuture(readStreamCompatible.asReadStream(v.asInstanceOf[readStreamCompatible.streams.BinaryStream].pipeTo(rc.response)))
       .mapEmpty()
   }
 
