@@ -2,6 +2,7 @@ package sttp.tapir.server.vertx.streams
 
 import java.util.concurrent.atomic.AtomicReference
 
+import io.vertx.core.{AsyncResult, Handler}
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.http.{WebSocketFrame => VertxWebSocketFrame}
 import io.vertx.core.http.ServerWebSocket
@@ -156,10 +157,12 @@ object Pipe {
         case Pong(payload) =>
           writeFrame(VertxWebSocketFrame.pongFrame(Buffer.buffer(payload)))
         case Close(statusCode, _) =>
-          socket.reject(statusCode)
+          socket.close(statusCode.toShort, new Handler[AsyncResult[Void]] {
+            def handle(x: AsyncResult[Void]): Unit = ()
+          })
       }
 
-      if (socket.writeQueueFull()) {
+      if (!socket.isClosed && socket.writeQueueFull()) {
         backpressure.updateAndGet(state => state.copy(queue = state.queue :+ Pause))
         applyBackpressureCommands(backpressure, request)
       }
